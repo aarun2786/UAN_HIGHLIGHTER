@@ -28,8 +28,3 @@ def pdf_highlight(excel,pdf):
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
     return page_num
-excel_file_path = "UAN_NUMBERS.xlsx"
-pdf_file_path = "uan.pdf"
-excel_data_list = get_excel_data(excel_file_path)
-pageno = pdf_highlight(excel_data_list,pdf_file_path)
-print(pageno)
