@@ -11,7 +11,7 @@ def home():
         PDF.save(PDF.filename)
         pdf = PDF.filename
         pdf_highlights = pdf_highlight(excel,pdf)
-        return f"{pdf_highlights}"
+        return f"{set(pdf_highlights)}"
     return render_template("home.html")
 
 if __name__ == "__main__":
