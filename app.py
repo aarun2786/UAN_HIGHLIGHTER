@@ -32,5 +32,5 @@ def delete_file():
     os.remove(filename)
     return "file delete"
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
 
