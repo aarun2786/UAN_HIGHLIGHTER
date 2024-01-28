@@ -9,7 +9,7 @@ def get_excel_data(file_path):
         data_list.extend((list(row)))
     workbook.close()
     return data_list
-
+color = (1,0,1)
 def pdf_highlight(excel,pdf):
     page_start = 0
     doc = fitz.open(pdf)
@@ -17,10 +17,10 @@ def pdf_highlight(excel,pdf):
     for uan in excel:
           for i in range(page_start,len(doc)):
             page_no = doc[i]
-            text = page_no.search_for(uan)
+            text = page_no.search_for(uan,quads=True)
             if text:
-                htext =  page_no.add_highlight_annot(text,quads=True)
-                htext.set_colors(stroke=(0,0,1))
+                htext =  page_no.add_highlight_annot(text)
+                htext.set_colors(stroke=color)
                 htext.update(opacity=0.5)
                 page_num.append(i+1)
                 page_start = i
