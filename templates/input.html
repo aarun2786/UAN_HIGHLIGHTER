@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="px-5 pt-5">
-    <a href="/download" class="btn btn-primary">Download</a>
+    <a href="{{ url_for('download_file') }}" class="btn btn-primary">Download</a>
+    <a href="{{ url_for('delete_file') }}" class="btn btn-primary">Delete</a>
     <br>
     <p>{{page_no}} </p>
     </div>
