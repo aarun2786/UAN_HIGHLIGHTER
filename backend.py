@@ -2,7 +2,7 @@ import openpyxl
 import fitz
 def get_excel_data(file_path):
     workbook = openpyxl.load_workbook(file_path)
-    sheet = workbook.active
+    sheet = workbook['UAN']
     max_row = sheet.max_row
     data_list = []
     for index, row in enumerate(sheet.iter_rows(min_row=1, max_row=max_row, values_only=True), start=1):
