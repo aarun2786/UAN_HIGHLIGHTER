@@ -2,4 +2,22 @@
 Flask==3.0.0
 openpyxl==3.1.2
 PyMuPDF==1.23.12
+<<<<<<< HEAD
 gunicorn
+=======
+PyMuPDFb==1.23.9
+pypdf==4.0.0
+PyPDF2==3.0.1
+PyPDF4==1.27.0
+pypng==0.20220715.0
+python-dateutil==2.8.2
+pytz==2023.3.post1
+qrcode==7.4.2
+six==1.16.0
+typing_extensions==4.8.0
+tzdata==2023.4
+wcwidth==0.2.13
+Werkzeug==3.0.1
+WTForms==3.1.2
+gunicorn
+>>>>>>> 538292bdedac1324bddd6c2c5bfb6ff7c0e4ad8a
