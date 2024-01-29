@@ -19,7 +19,7 @@ def pdf_highlight(excel,pdf,color):
             text = page_no.search_for(uan,quads=True)
             if text:
                 htext =  page_no.add_highlight_annot(text)
-                htext.set_colors(stroke=[0,1,0])
+                htext.set_colors(stroke=color)
                 htext.update(opacity=0.5)
                 page_num.append(i+1)
                 page_start = i
@@ -27,3 +27,10 @@ def pdf_highlight(excel,pdf,color):
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
     return page_num
+def color_selecton(color):
+    if color == 'red':
+        return (1,0,0)
+    elif color == 'green':
+        return (0,0.9,0)
+    elif color == 'blue':
+        return (0,0,1)
