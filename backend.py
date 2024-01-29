@@ -27,6 +27,7 @@ def pdf_highlight(excel,pdf,color):
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
     return page_num
+
 def color_selecton(color):
     if color == 'red':
         return (1,0,0)
