@@ -38,5 +38,5 @@ def delete_file():
     except:
         return 'FILE ALREDY DELETE'
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
 
