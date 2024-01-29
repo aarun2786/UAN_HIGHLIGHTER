@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request, redirect,send_file,url_for
+from flask import Flask,render_template, request, redirect,send_file,url_for,flash
 from backend import get_excel_data,pdf_highlight
 app = Flask(__name__)
 import time
@@ -10,7 +10,7 @@ def home():
     if request.method == 'POST':
         EXCEL = request.files['excel']
         PDF = request.files['pdf']
-        color = tuple(request.form['color'])
+        color = request.form['color']
         excel =  get_excel_data(EXCEL)
         PDF.save(PDF.filename)
         pdf = PDF.filename
@@ -23,14 +23,20 @@ def home():
 def download_file():
     global pdf
     filename = pdf
-    return send_file(filename, as_attachment=True)
+    try:
+        return send_file(filename, as_attachment=True)
+    except FileNotFoundError as e:
+        return f"{filename} not found"
 
 @app.route('/delete')
 def delete_file():
     global pdf
     filename = pdf
-    os.remove(filename)
-    return "file delete"
+    try:
+        os.remove(filename)
+        return "file delete"
+    except:
+        return 'FILE ALREDY DELETE'
 if __name__ == "__main__":
     app.run(debug=True)
 

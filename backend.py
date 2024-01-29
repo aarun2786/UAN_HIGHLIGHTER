@@ -19,7 +19,7 @@ def pdf_highlight(excel,pdf,color):
             text = page_no.search_for(uan,quads=True)
             if text:
                 htext =  page_no.add_highlight_annot(text)
-                htext.set_colors(stroke=(0,0,1))
+                htext.set_colors(stroke=[0,1,0])
                 htext.update(opacity=0.5)
                 page_num.append(i+1)
                 page_start = i
