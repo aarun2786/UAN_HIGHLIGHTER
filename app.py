@@ -17,7 +17,7 @@ def home():
         pdf = PDF.filename
         pdf_highlights = pdf_highlight(excel,pdf,clr)
         
-        return render_template("input.html",page_no=set(pdf_highlights))
+        return render_template("input.html",page_no=sorted(set(pdf_highlights)))
     return render_template("home.html")
 
 @app.route('/download')
