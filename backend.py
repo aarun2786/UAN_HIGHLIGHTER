@@ -10,7 +10,18 @@ def get_excel_data(file_path):
     workbook.close()
     return data_list
 
-def pdf_highlight(excel,pdf,color):
+def only_micron(pdf):
+    doc = fitz.open(pdf)
+    page_num = []
+    for i in range(len(doc)):
+        page_no = doc[i]
+        text = page_no.search_for('BGBNG0016858000')
+        if text :
+            page_num.append(i+1)
+    doc.close
+    return page_num[::len(page_num)-1]
+
+def pdf_highlight(excel,pdf,page,color=(0,0,1)):
     page_start = 0
     doc = fitz.open(pdf)
     page_num = []
@@ -27,7 +38,11 @@ def pdf_highlight(excel,pdf,color):
                 break
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
-    return page_num
+    page_num = sorted(set(page_num))
+    for pgno ,act_page in enumerate(page_num):
+        page.insert(1+pgno,act_page)
+    highlight_pageno = [ str(pg) for pg in page]
+    return ",".join(highlight_pageno)
 
 def color_selecton(color):
     if color == 'red':
