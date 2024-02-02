@@ -1,5 +1,5 @@
 from flask import Flask,render_template, request, redirect,send_file,url_for,flash
-from backend import get_excel_data,pdf_highlight,color_selecton,only_micron
+from backend import *
 app = Flask(__name__)
 import time
 import os
@@ -11,13 +11,19 @@ def home():
         EXCEL = request.files['excel']
         PDF = request.files['pdf']
         color = request.form['color']
+        compay = request.form['com']
         excel =  get_excel_data(EXCEL)
         clr = color_selecton(color)
         PDF.save(PDF.filename)
         pdf = PDF.filename
-        only_mic = only_micron(pdf)
-        pdf_highlights = pdf_highlight(excel,pdf,only_mic,clr)
-        return render_template("input.html",page_no=pdf_highlights)
+        if compay == "only micron":
+            only_mic = only_micron(pdf)
+            pdf_highlights = pdf_highlight(excel,pdf,only_mic,clr)
+            return render_template("input.html",page_no=pdf_highlights)
+        else:
+            all_comp = all(pdf)
+            all_pdf_highlight = highlight_all(excel,pdf,all_comp,clr)
+            return render_template("input.html",page_no=all_pdf_highlight)
     return render_template("home.html")
 
 @app.route('/download')
