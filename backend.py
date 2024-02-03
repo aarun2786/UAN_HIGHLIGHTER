@@ -36,19 +36,15 @@ def only_micron(pdf):
         text = page_no.search_for('BGBNG0016858000')
         if text :
             page_num.append(i+1)
-    doc.close
+    doc.close()
     return page_num[::len(page_num)-1]
 
 def highlight_all(excel,pdf,page,color=(0,0,1)):
-    mic = page[0]
-    rmw = page[1]
-    smw = page[2]
+    mic,rmw,smw = page
     mic_id = "BGBNG0016858000"
     rmw_id = "PYPNY2401211000"
     smw_id = "PYPNY2401591000"
-    m = []
-    r = []
-    s = []
+    m,r,s = [],[],[]
     pageNoeach ={}
     page_start = 0
     doc = fitz.open(pdf)
@@ -81,18 +77,21 @@ def highlight_all(excel,pdf,page,color=(0,0,1)):
                 page_start = i
                 break
     doc.save(pdf,incremental=True,encryption=0)
-    doc.close
+    doc.close()
+
     mic_page = sorted(set(m))
     rmw_page = sorted(set(r))
     smw_page = sorted(set(s))
+
     for index,pgeno in enumerate(mic_page):
         mic.insert(1+index,pgeno)
     for index,pgeno in enumerate(rmw_page):
         rmw.insert(1+index,pgeno)
     for index,pgeno in enumerate(smw_page):
         smw.insert(1+index,pgeno)
-    for value ,key in zip(['Micron','RMW','SMW'],[mic,rmw,smw]):
-        pageNoeach[value] = key
+
+    for value ,key in zip(['MiCRON','RMW','SMW'],[mic,rmw,smw]):
+        pageNoeach[value] = [ str(pg) for pg in key]
     return pageNoeach
 
 def pdf_highlight(excel,pdf,page,color=(0,0,1)):
@@ -112,9 +111,12 @@ def pdf_highlight(excel,pdf,page,color=(0,0,1)):
                 break
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
+
     page_num = sorted(set(page_num))
+
     for pgno ,act_page in enumerate(page_num):
         page.insert(1+pgno,act_page)
+
     highlight_pageno = [ str(pg) for pg in page]
     return ",".join(highlight_pageno)
 

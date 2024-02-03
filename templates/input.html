@@ -10,7 +10,7 @@
         #box{
             border: 1px solid #000;
             padding: 10px;
-            max-width: 599px; /* Adjust the max-width to fit your needs */
+            max-width: 800; /* Adjust the max-width to fit your needs */
             overflow: auto; /* Add scrollbars if content overflows */
             word-wrap: break-word;
         }
@@ -24,8 +24,17 @@
         <br>
         Page Number
         <div id="box">
-            <p>{{page_no}}</p>
-        </div>
+            {% if com == "only micron" %}
+                {{ page_no}}
+            {% else %}
+                {% for cp in page_no %}
+                   <b> {{ cp  }}</b>
+                   <br>
+                    {{ page_no[cp]|join(",") }}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </div>      
     </div>
 </body>
 </html>

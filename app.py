@@ -19,11 +19,11 @@ def home():
         if compay == "only micron":
             only_mic = only_micron(pdf)
             pdf_highlights = pdf_highlight(excel,pdf,only_mic,clr)
-            return render_template("input.html",page_no=pdf_highlights)
+            return render_template("input.html",page_no=pdf_highlights,com=compay)
         else:
             all_comp = all(pdf)
             all_pdf_highlight = highlight_all(excel,pdf,all_comp,clr)
-            return render_template("input.html",page_no=all_pdf_highlight)
+            return render_template("input.html",page_no=all_pdf_highlight,com=compay)
     return render_template("home.html")
 
 @app.route('/download')
