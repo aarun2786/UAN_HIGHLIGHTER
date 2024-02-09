@@ -6,9 +6,10 @@ def get_excel_data(file_path):
     max_row = sheet.max_row
     data_list = []
     for index, row in enumerate(sheet.iter_rows(min_row=1, max_row=max_row, values_only=True), start=1):
-        data_list.extend((list(row)))
+        data_list.extend(list((row)))
     workbook.close()
-    return data_list
+    listt = [str(num) for num in data_list]
+    return listt 
 
 def all(pdf):
     doc = fitz.open(pdf)
@@ -127,3 +128,89 @@ def color_selecton(color):
         return (0,0.9,0)
     elif color == 'blue':
         return (0,0,1)
+
+def esic(pdf):
+    doc = fitz.open(pdf)
+    MIC = "53000116040000604"
+    RMW = "53000563650001099"
+    SMW = "53000563750001099"
+    mic,rmw,smw = [],[],[]
+    for pg in range(len(doc)):
+        page_no = doc[pg]
+        if page_no.search_for(MIC) :
+            mic.append(pg+1) 
+        elif page_no.search_for(RMW):
+            mic.append((pg+1)-1)
+            rmw.append(pg+1)
+        elif  page_no.search_for(SMW):
+            rmw.append((pg+1)-1)
+            smw.append(pg+1)
+    smw.append(len(doc))
+    return mic,rmw,smw
+
+def esic_highlight(excel,pdf,page,color=(0,0,1)):
+    doc = fitz.open(pdf)
+    mic,rmw,smw = page
+    m,r,s = [],[],[]
+    pageNoeach ={}
+    page_start = 0
+    for uan in excel:
+        for pg in range(page_start,len(doc)):
+            page_no = doc[pg]
+            text = page_no.search_for(uan,quads=True)
+            mics,mice = mic[0],mic[1]
+            rmws,rmwe = rmw[0],rmw[1]
+            smws,smwe = smw[0],smw[1]
+            if text and (pg+1 >= mics and pg+1 <= mice) :
+                htext =  page_no.add_highlight_annot(text)
+                htext.set_colors(stroke=color)
+                htext.update(opacity=0.5)
+                m.append(pg+1)
+                page_start = pg
+                break   
+                
+            if text and (pg+1 >= rmws and pg+1 <= rmwe) :
+                htext =  page_no.add_highlight_annot(text)
+                htext.set_colors(stroke=color)
+                htext.update(opacity=0.5)
+                r.append(pg+1)
+                page_start = pg
+                break   
+                
+            if text and (pg+1 >= smws and pg+1 <= smwe) :
+                htext =  page_no.add_highlight_annot(text)
+                htext.set_colors(stroke=color)
+                htext.update(opacity=0.5)
+                s.append(pg+1)
+                page_start = pg
+                break   
+  
+    doc.save(pdf,incremental=True,encryption=0)
+    doc.close()
+    
+    mic_page = sorted(set(m))
+    rmw_page = sorted(set(r))
+    smw_page = sorted(set(s))
+    
+    for index,pgeno in enumerate(m):
+        mic.insert(1+index,pgeno)
+    for index,pgeno in enumerate(r):
+        rmw.insert(1+index,pgeno)
+    for index,pgeno in enumerate(s):
+        smw.insert(1+index,pgeno)
+
+    mic_page = sorted(set(mic))
+    rmw_page = sorted(set(rmw))
+    smw_page = sorted(set(smw))
+
+
+    mic_page.pop(len(mic_page)-1)
+    rmw_page.pop(len(rmw_page)-1)
+    smw_page.pop(len(smw_page)-1)
+    for value ,key in zip(['MiCRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
+        pageNoeach[value] = [ str(pg) for pg in key]
+
+    return pageNoeach
+
+
+
