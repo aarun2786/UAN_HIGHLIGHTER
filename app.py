@@ -12,18 +12,37 @@ def home():
         PDF = request.files['pdf']
         color = request.form['color']
         compay = request.form['com']
+        fun = request.form['type']
         excel =  get_excel_data(EXCEL)
         clr = color_selecton(color)
         PDF.save(PDF.filename)
         pdf = PDF.filename
-        if compay == "only micron":
-            only_mic = only_micron(pdf)
-            pdf_highlights = pdf_highlight(excel,pdf,only_mic,clr)
-            return render_template("input.html",page_no=pdf_highlights,com=compay)
+
+        
+        if fun == 'ESI':
+            if compay == "only micron":
+                esic_page = ESIC(pdf)
+                only_micron = only_micron_esi(excel,pdf,esic_page,clr)
+                return render_template("input.html",page_no=only_micron,com = compay)
+            else:
+                esic_page = ESIC(pdf)
+                for_all = highlight_for_all_esic(excel,pdf,esic_page,clr)
+                return render_template("input.html",page_no=for_all,com = compay)
         else:
-            all_comp = all(pdf)
-            all_pdf_highlight = highlight_all(excel,pdf,all_comp,clr)
-            return render_template("input.html",page_no=all_pdf_highlight,com=compay)
+            if compay == "only micron":
+                pf_page = PF(pdf)
+                only_micron = only_micron_pf(excel,pdf,pf_page,clr)
+                return render_template("input.html",page_no=only_micron,com = compay)
+            else:
+                pf_page = PF(pdf)
+                for_all = highlight_for_all_pf(excel,pdf,pf_page,clr)
+                return render_template("input.html",page_no=for_all,com = compay)
+                
+        
+    return render_template("home.html")
+
+
+
     return render_template("home.html")
 
 @app.route('/download')
