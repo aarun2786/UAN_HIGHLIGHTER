@@ -18,28 +18,29 @@ def home():
         PDF.save(PDF.filename)
         pdf = PDF.filename
 
-        
-        if fun == 'ESI':
-            if compay == "only micron":
-                esic_page = ESIC(pdf)
-                only_micron = only_micron_esi(excel,pdf,esic_page,clr)
-                return render_template("input.html",page_no=only_micron,com = compay)
+        if compay == "only micron":
+            if fun == 'PF':
+                pf_page =PF(pdf)
+                pf = only_micron_pf(excel,pdf,pf_page,clr)
+                return render_template('input.html',page_no =pf,com=compay)
             else:
-                esic_page = ESIC(pdf)
-                for_all = highlight_for_all_esic(excel,pdf,esic_page,clr)
-                return render_template("input.html",page_no=for_all,com = compay)
+                esic_page = ESIC(excel)
+                esic = only_micron_pf(excel,pdf,esic_page,clr)
+                return render_template('input.html',pfpage_no=esic,com=compay)
+
+        elif compay == 'for all':
+            if fun == 'PF':
+                pf_page =PF(pdf)
+                pf = highlight_for_all_pf(excel,pdf,pf_page,clr)
+                return render_template('input.html',page_no =pf,com=compay)
+            else:
+                esic_page = ESIC(excel)
+                esic = highlight_for_all_esic(excel,pdf,esic_page,clr)
+                return render_template('input.html',page_no=esic,com=compay)
+
         else:
-            if compay == "only micron":
-                pf_page = PF(pdf)
-                only_micron = only_micron_pf(excel,pdf,pf_page,clr)
-                return render_template("input.html",page_no=only_micron,com = compay)
-            else:
-                pf_page = PF(pdf)
-                for_all = highlight_for_all_pf(excel,pdf,pf_page,clr)
-                return render_template("input.html",page_no=for_all,com = compay)
-                
-        
-    return render_template("home.html")
+            just_highlight = highlight_only(excel,pdf,clr)
+            return render_template('input.html',page_no=just_highlight,com="other")
 
 
 

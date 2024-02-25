@@ -80,7 +80,7 @@ def highlight_for_all_pf(excel,pdf,page,color=(0,0,1)):
     for index,pgeno in enumerate(smw_page):
         smw.insert(1+index,pgeno)
 
-    for value ,key in zip(['MiCRON','RMW','SMW'],[mic,rmw,smw]):
+    for value ,key in zip(['MICRON','RMW','SMW'],[mic,rmw,smw]):
         pageNoeach[value] = [ str(pg) for pg in key]
     return pageNoeach
 
@@ -196,7 +196,7 @@ def highlight_for_all_esic(excel,pdf,page,color=(0,0,1)):
     rmw_page.pop(len(rmw_page)-1)
     smw_page.pop(len(smw_page)-1)
     # covert list of page into the company wise 
-    for value ,key in zip(['MiCRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
+    for value ,key in zip(['MICRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
         pageNoeach[value] = [ str(pg) for pg in key]
 
     return pageNoeach
@@ -229,4 +229,27 @@ def only_micron_esi(excel,pdf,page,color=(0,0,1)):
 
     highlight_pageno = [ str(pg) for pg in mic_page]
     return ",".join(highlight_pageno)
+
+def highlight_only(excel,pdf,color=(0,0,1)):
+    page_start = 0
+    doc = fitz.open(pdf)
+    page_num = []
+    for uan in excel:
+          for i in range(page_start,len(doc)):
+            page_no = doc[i]
+            text = page_no.search_for(uan,quads=True)
+            if text:
+                htext = page_no.add_highlight_annot(text)
+                htext.set_colors(stroke=color)
+                htext.update(opacity=0.5)
+                page_num.append(i+1)
+                page_start = i
+                break
+    doc.save(pdf,incremental=True,encryption=0)
+    doc.close
+
+    page_num = sorted(set(page_num))
+
+    highlight_pageno = [ str(pg) for pg in page_num]
+    return ",".join(highlight_pageno)                   
 

@@ -24,7 +24,7 @@
         <br>
         Page Number
         <div id="box">
-            {% if com == "only micron" %}
+            {% if com == "only micron" or com == "other"  %}
                 {{ page_no}}
             {% else %}
                 {% for cp in page_no %}
