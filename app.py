@@ -24,7 +24,7 @@ def home():
                 pf = only_micron_pf(excel,pdf,pf_page,clr)
                 return render_template('input.html',page_no =pf,com=compay)
             else:
-                esic_page = ESIC(excel)
+                esic_page = ESIC(pdf)
                 esic = only_micron_pf(excel,pdf,esic_page,clr)
                 return render_template('input.html',pfpage_no=esic,com=compay)
 
@@ -34,7 +34,7 @@ def home():
                 pf = highlight_for_all_pf(excel,pdf,pf_page,clr)
                 return render_template('input.html',page_no =pf,com=compay)
             else:
-                esic_page = ESIC(excel)
+                esic_page = ESIC(pdf)
                 esic = highlight_for_all_esic(excel,pdf,esic_page,clr)
                 return render_template('input.html',page_no=esic,com=compay)
 

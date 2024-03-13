@@ -13,9 +13,7 @@ def get_excel_data(file_path):
 
 def PF(pdf):
     doc = fitz.open(pdf)
-    MIC = []
-    RMW = []
-    SMW = []
+    MIC,RMW,SMW = [],[],[]
     mic = "BGBNG0016858000"
     rmw = "PYPNY2401211000"
     smw = "PYPNY2401591000"
