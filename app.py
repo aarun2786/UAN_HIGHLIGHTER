@@ -1,6 +1,7 @@
 from flask import Flask,render_template, request, redirect,send_file,url_for,flash
 from backend import *
 app = Flask(__name__)
+app.secret_key = 'akr'
 import time
 import os
 pdf = ""
@@ -45,6 +46,9 @@ def home():
 
 
     return render_template("home.html")
+@app.route("/input")
+def input():
+    return render_template('input.html')
 
 @app.route('/download')
 def download_file():
@@ -52,18 +56,20 @@ def download_file():
     filename = pdf
     try:
         return send_file(filename, as_attachment=True)
-    except FileNotFoundError as e:
-        return f"{filename} not found"
-
+    except Exception as e:
+        flash(f"{filename} not found","error")
+        return redirect(url_for("input"))
 @app.route('/delete')
 def delete_file():
     global pdf
     filename = pdf
     try:
         os.remove(filename)
-        return "file delete"
+        flash("File deleted",'success')
+        return redirect(url_for("input"))
     except:
-        return 'FILE ALREDY DELETE'
+        flash('FILE ALREDY DELETE','error')
+        return redirect(url_for("input"))        
 if __name__ == "__main__":
     app.run(debug=True)
 
