@@ -1,75 +1,51 @@
-from flask import Flask,render_template, request, redirect,send_file,url_for,flash
+from flask import Flask,render_template, request, redirect,send_file,url_for,flash,Blueprint
 from backend import *
-app = Flask(__name__)
-app.secret_key = 'akr'
-import time
-import os
-pdf = ""
-@app.route('/',methods=['POST','GET'])
+from file_operation import *
+Main = Blueprint("Main", __name__)
+
+@Main.route(rule = '/', methods = ['POST','GET'])
 def home():
-    global pdf
     if request.method == 'POST':
         EXCEL = request.files['excel']
         PDF = request.files['pdf']
         color = request.form['color']
-        compay = request.form['com']
+        company = request.form['com']
         fun = request.form['type']
-        excel =  get_excel_data(EXCEL)
+        Project_name = request.form['Project_Name']
+
+        name = Change_filename(PDF.filename, Project_name)
+        excel = get_excel_data(EXCEL)
         clr = color_selecton(color)
-        PDF.save(PDF.filename)
-        pdf = PDF.filename
+        path = f"{folder}/{name}"
+        save_file(PDF, Project_name)
 
-        if compay == "only micron":
+        if company == "Only Micron":
             if fun == 'PF':
-                pf_page =PF(pdf)
-                pf = only_micron_pf(excel,pdf,pf_page,clr)
-                return render_template('input.html',page_no =pf,com=compay)
+                pf_page = PF(path)
+                pf = only_micron_pf(excel, path, pf_page, clr)
+                update_json(Project_name, pf, fun, name)
             else:
-                esic_page = ESIC(pdf)
-                esic = only_micron_pf(excel,pdf,esic_page,clr)
-                return render_template('input.html',pfpage_no=esic,com=compay)
+                esic_page = ESIC(path)
+                esic = only_micron_esi(excel, path, esic_page, clr)
+                update_json(Project_name, esic, fun, name)
 
-        elif compay == 'for all':
+        elif company == 'For all':
             if fun == 'PF':
-                pf_page =PF(pdf)
-                pf = highlight_for_all_pf(excel,pdf,pf_page,clr)
-                return render_template('input.html',page_no =pf,com=compay)
+                pf_page = PF(path)
+                pf = highlight_for_all_pf(excel, path, pf_page, clr)
+                update_json(Project_name, pf, fun, name)
             else:
-                esic_page = ESIC(pdf)
-                esic = highlight_for_all_esic(excel,pdf,esic_page,clr)
-                return render_template('input.html',page_no=esic,com=compay)
+                esic_page = ESIC(path)
+                esic = highlight_for_all_esic(excel, path, esic_page, clr)
+                update_json(Project_name, esic, fun, name)
+        return redirect(url_for("Main.home"))
 
-        else:
-            just_highlight = highlight_only(excel,pdf,clr)
-            return render_template('input.html',page_no=just_highlight,com="other")
+    json_data = get_json()
+    return render_template('home.html',name=json_data)
 
 
-
-    return render_template("home.html")
-@app.route("/input")
-def input():
-    return render_template('input.html')
-
-@app.route('/download')
-def download_file():
-    global pdf
-    filename = pdf
-    try:
-        return send_file(filename, as_attachment=True)
-    except Exception as e:
-        flash(f"{filename} not found","error")
-        return redirect(url_for("input"))
-@app.route('/delete')
-def delete_file():
-    global pdf
-    filename = pdf
-    try:
-        os.remove(filename)
-        flash("File deleted",'success')
-        return redirect(url_for("input"))
-    except:
-        flash('FILE ALREDY DELETE','error')
-        return redirect(url_for("input"))        
-if __name__ == "__main__":
-    app.run(debug=True)
+@Main.route(rule = '/download/<name>')
+def download(name):
+     with open(f"static/PDF/{name}",'r') as file:         
+         return send_file(file.name, as_attachment=True)
 
