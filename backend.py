@@ -1,5 +1,11 @@
 import openpyxl
 import fitz
+import os
+import json
+import datetime
+folder = r"static/PDF"
+list_db = []
+from werkzeug.utils import secure_filename
 def get_excel_data(file_path):
     workbook = openpyxl.load_workbook(file_path)
     sheet = workbook.active
@@ -65,6 +71,7 @@ def highlight_for_all_pf(excel,pdf,page,color=(0,0,1)):
                 page_start = i
                 break
     doc.save(pdf,incremental=True,encryption=0)
+
     doc.close()
 
     mic_page = sorted(set(m))
@@ -79,7 +86,7 @@ def highlight_for_all_pf(excel,pdf,page,color=(0,0,1)):
         smw.insert(1+index,pgeno)
 
     for value ,key in zip(['MICRON','RMW','SMW'],[mic,rmw,smw]):
-        pageNoeach[value] = [ str(pg) for pg in key]
+        pageNoeach[value] = ",".join([ str(pg) for pg in key])
     return pageNoeach
 
 def only_micron_pf(excel,pdf,page,color=(0,0,1)):
@@ -107,7 +114,8 @@ def only_micron_pf(excel,pdf,page,color=(0,0,1)):
         page.insert(1+pgno,act_page)
 
     highlight_pageno = [ str(pg) for pg in page]
-    return ",".join(highlight_pageno)
+    page = {"Micron":",".join(highlight_pageno)}
+    return page
 
 def color_selecton(color):
     if color == 'red':
@@ -195,7 +203,7 @@ def highlight_for_all_esic(excel,pdf,page,color=(0,0,1)):
     smw_page.pop(len(smw_page)-1)
     # covert list of page into the company wise 
     for value ,key in zip(['MICRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
-        pageNoeach[value] = [ str(pg) for pg in key]
+        pageNoeach[value] = ",".join([ str(pg) for pg in key])
 
     return pageNoeach
 
@@ -226,7 +234,8 @@ def only_micron_esi(excel,pdf,page,color=(0,0,1)):
     mic_page.pop(len(mic_page)-1)
 
     highlight_pageno = [ str(pg) for pg in mic_page]
-    return ",".join(highlight_pageno)
+    page = {"Micron": ",".join(highlight_pageno)}
+    return page
 
 def highlight_only(excel,pdf,color=(0,0,1)):
     page_start = 0
@@ -251,3 +260,10 @@ def highlight_only(excel,pdf,color=(0,0,1)):
     highlight_pageno = [ str(pg) for pg in page_num]
     return ",".join(highlight_pageno)                   
 
+def Change_filename(file,project_name):
+    file_name = file.replace(" ", "_")
+    return f"{project_name}_{file_name}"
+
+def save_file(file,project_name):
+    photo_name = secure_filename(Change_filename(file.filename, project_name))
+    file.save(os.path.join(folder, photo_name))
