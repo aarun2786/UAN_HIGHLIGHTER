@@ -5,45 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
-    <title>Document</title>
+    <title>UAN HIGHLITER</title>
 </head>
-<body style="background-color:hsl(205, 40%, 88%);" >
-    <div class="pt-5" >
-        <form action="/" method="POST" enctype="multipart/form-data">
-            <div class="px-5 pb-1">
-                <label for="pdf1">PDF</label>
-            </div>
-            <div class="px-5 pb-3">
-                <input type="file" id="pdf1" name="pdf" accept=".pdf" />
-            </div>
-            <div class="px-5 pb-1">
-                <label for="pdf1">EXCEL</label>
-            </div>
-            <div class="px-5 pb-3">
-                <input type="file" id="excel" name="excel" />
-            </div>
-            <div class="px-5 pb-3">
-               Red: <input type="radio" name="color" value="red">
-               Green: <input type="radio" name="color" value="green">
-               Blue: <input type="radio" name="color" value="blue">
-            </div>
-            <div class="px-5 pb-3">
-                Only Micron <input type="radio" name="com" value="only micron">
-                <br>
-                For all <input type="radio" name="com" value="for all">
-                <br>
-                Just highlight <input type="radio" name="com" value="Just highlight">
-            </div>
-           
-            <div class="px-5 pb-3">
-                PF <input type="radio" name="type" value="PF">  
-                ESI <input type="radio" name="type" value="ESI">
-            </div>
-            <div class="px-5 pb-3">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+
+<style type="text/css" >
+    .scroll{
+        display:block;
+        padding: 5px;
+        margin-top: 5px;
+        overflow: scroll;
+        height: 500px;
+    }
+</style>
+<body style="background-image: linear-gradient(to right, #5C2E7E , #000000);" >
+    <div class="row  px-5 py-5  ">
+<! -- This First row and First Columns -- >
+        <div class="col-4 " style="background-image: linear-gradient(to right, #124076 , #005B41);">
+
+<! -- This 2nd is row belongs to  input file  -- >
+            <form action="{{url_for('Main.home')}}" method="post" enctype="multipart/form-data"  >
+
+                <div class="row text-white " >
+                    <label class="p-2 text-white bg-opacity-75  " style="background-image: linear-gradient(to right, #1C82AD , #03C988);" >File</label>
+                    <label> PDF </label>
+                    <input class="pb-2" type="file" name="pdf" accept=".pdf"  required  >
+                    <label> Excel </label>   
+                    <input class="pb-2" type="file" name="excel" required  >
+                </div>
+
+<! -- This 3rd is row belongs to  color selection  -- >
+                <div class="row  py-2" >
+                    <label class="p-2 text-white bg-opacity-75" style="background-image: linear-gradient(to right, #1C82AD , #03C988);"  >Color</label>
+
+                    <div class=" col pt-3">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+                            <input type="radio" class="btn-check px-1 " name="color" id="btnradio1"  value="red" autocomplete="off" checked>
+                            <label class="btn btn-outline-danger px-3 fw-bold " for="btnradio1">Red</label>
+                          
+                            <input type="radio" class="btn-check" name="color" id="btnradio2"  value="green" autocomplete="off">
+                            <label class="btn btn-outline-success px-3  fw-bold " for="btnradio2">Green</label>
+                          
+                            <input type="radio" class="btn-check" name="color" id="btnradio3"  value="blue" autocomplete="off">
+                            <label class="btn  btn-outline-primary  px-3 fw-bold " for="btnradio3">Blue</label>
+
+                        </div>
+                    </div>
+                </div>
+
+<! -- This 4th is row belongs to  Action  -- >
+                <div class="row text-white py-2" >
+                    <label class="p-2 text-white bg-opacity-75" style="background-image: linear-gradient(to right, #1C82AD , #03C988);" >Action</label>
+
+                    <div class=" col pb-3">
+                        <div class="col fw-bold " ><input  type="radio" name="com" value="Only Micron"  required ><label>->Only Micron </label></div>
+                        <div class="col fw-bold " ><input type="radio" name="com" value="For all" required ><label>->For all </label></div>
+                    </div>
+
+                    <div class=" col pb-3">
+                        <div class="col fw-bold " ><input  type="radio" name="type" value="PF" required ><label>->PF </label></div>
+                        <div class="col fw-bold " ><input type="radio" name="type" value="ESIC" required ><label>->ESIC </label></div>
+                    </div>
+                
+                </div>
+<! -- This 5th is row belongs to  input filed  -- >
+
+                <div class="py-2" >
+                    <input class="form-control form-control-lg" type="text" placeholder=".Project Name" aria-label="Project Name "  required name="Project_Name">
+                </div>
+
+<! -- This 6th is row belongs to  input sumbimt  -- >
+                    <div class="row px-3 py-2 " >
+                        <div class="   text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
             
-        </form>
+            </form>
+
+        </div>
+        
+    
+    
+<! -- This 2nd column   -- >
+
+        <div class="col   py-4 px-1" style="background-image: linear-gradient(to right, #0E2954 , #1F6E8C);" >
+            <div class="scroll     " >
+                {% for data in name %}
+                    <div class=" container  border    ">
+                        
+                        <div class="row bg-primer    " style="background-image: linear-gradient(to right, #009F9D , #FF6768);" >
+                            
+                            <div class="col-3   " >
+                                <div class="badge  py-1 " >
+                                    <h5>{{data["Project_Name"]}}</h5>
+                                </div>
+                            </div>
+                            
+                            <div class=" col-1" >
+                                <div class=" badge text-white py-1" >
+                                    <h5>{{data["Type"]}}</h5>
+                                </div>
+                            </div>
+
+                            <div class=" col-1" >
+                                <div class=" badge text-white" >
+                                    {{data["Date"]}}
+                                </div>
+                            </div>
+
+                            <div class=" col-7   text-end" >
+                                <div class=" badge text-white" >
+                                    <a href="{{url_for('Main.download',name=data['Filename'])}}" ><button class="btn rounded-4 btn-sm text-white " style="background-color:#053220" >Download PDF</button> </a>
+                                </div>
+                            </div>
+
+
+
+                        
+                        </div>
+                        
+
+
+                        <div class="row bg-primery" >
+                            <div class="px-1 text-white " >
+                                Page No
+                            </div>
+                        </div>
+                            
+                        <div class="col-16    " >
+                                <div class="   text-white py-1 " >
+                                    {% for pageno in   data["Page"] %}
+                                        <div class="fw-bold text-white " >
+                                            {{ pageno }} 
+                                        </div>
+                                        <div class="text-break text-white " >
+                                             {{data["Page"][pageno]}}
+                                        </div>    
+                                        {% endfor %}
+                                </div>
+                            </div>
+                    
+                
+                    </div>
+                
+                    {% endfor %}
+
+
+            </div>
+        
+        </div>
+    
+    
+    
+    
+    
+    
+    
     </div>
+
+
 </body>
 </html>
