@@ -240,7 +240,7 @@ def only_micron_esi(excel,pdf,page,color=(0,0,1)):
 def highlight_only(excel,pdf,color=(0,0,1)):
     page_start = 0
     doc = fitz.open(pdf)
-    page_num = []
+    page_num = [1]
     for uan in excel:
           for i in range(page_start,len(doc)):
             page_no = doc[i]
@@ -254,11 +254,9 @@ def highlight_only(excel,pdf,color=(0,0,1)):
                 break
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
-
     page_num = sorted(set(page_num))
-
     highlight_pageno = [ str(pg) for pg in page_num]
-    return ",".join(highlight_pageno)                   
+    return ",".join(highlight_pageno)
 
 def Change_filename(file,project_name):
     file_name = file.replace(" ", "_")

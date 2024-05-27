@@ -16,6 +16,5 @@ def restart_file():
 days = datetime.datetime.now().day
 
 if days == 19 :
-    print('True')
     restart_file()
 

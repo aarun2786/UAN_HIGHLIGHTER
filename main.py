@@ -38,6 +38,13 @@ def home():
                 esic_page = ESIC(path)
                 esic = highlight_for_all_esic(excel, path, esic_page, clr)
                 update_json(Project_name, esic, fun, name)
+
+        else:
+                page = highlight_only(excel,path,clr)
+                update_json(Project_name,page ,fun,name)
+
+
+
         return redirect(url_for("Main.home"))
 
     json_data = get_json()
