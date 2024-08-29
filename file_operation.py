@@ -33,4 +33,3 @@ def time_covert():
     indian_time = utc_now.replace(tzinfo=utc_zone).astimezone(indian_zone)
     time_format = indian_time.strftime("%d-%m-%Y %I:%M %p")
     return time_format,indian_time.day
-

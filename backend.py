@@ -3,19 +3,21 @@ import fitz
 import os
 import json
 import datetime
-folder = r"static/PDF"
+folder = "static\PDF"
 list_db = []
 from werkzeug.utils import secure_filename
 
 
 import pandas as pd
 def get_excel_data(excel,fun):
-    DATA =  pd.read_excel(excel,sheet_name=0,header=None)
+    DATA =  pd.read_excel(excel,sheet_name=1,header=None)
     first_column = DATA.to_dict()[0] # for first column
     uan_number = []
     for i in range(len(first_column)): # dict to list
-        uan_number.append(first_column[i])
+        uan_number.append(str(first_column[i]))
+    uan_number
     if 1 in uan_number : # Error Handling
+        print(uan_number)
         text = "UAN" if fun.lower() == "pf" else 'Esic'
         raise Exception(f"In this Excel sheet doesn't have a {text} number. Select the proper Excel sheet that contains the {text} number.")
     else:
@@ -276,3 +278,10 @@ def save_file(file,project_name):
 
 
 
+def test():
+    k = [1,2,3,5]
+    if 1 in k:
+        print(True)
+
+
+test()

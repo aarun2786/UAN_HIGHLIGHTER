@@ -18,8 +18,8 @@
     }
 </style>
 <body style="background-image: linear-gradient(to right, #5C2E7E , #000000);" >
-    <div>{% include 'alert.html' %}</div>
-    <div class="row  px-5 pb-5  ">
+    <div id="message">{% include 'alert.html' %}</div>
+    <div class="row  mx-5 my-5  ">
 <! -- This First row and First Columns -- >
         <div class="col-4 " style="background-image: linear-gradient(to right, #124076 , #005B41);">
 
@@ -157,15 +157,16 @@
             </div>
         
         </div>
-    
-    
-    
-    
-    
-    
-    
     </div>
 
-
+<script>
+    function delete_msg(){
+        let mesg = document.getElementById("message")
+        console.log(mesg);
+        mesg.style.display ="none";
+        
+    };
+    setTimeout(delete_msg, 6000);
+</script>
 </body>
 </html>
