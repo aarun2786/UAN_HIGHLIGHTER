@@ -6,16 +6,20 @@ import datetime
 folder = r"static/PDF"
 list_db = []
 from werkzeug.utils import secure_filename
-def get_excel_data(file_path):
-    workbook = openpyxl.load_workbook(file_path)
-    sheet = workbook.active
-    max_row = sheet.max_row
-    data_list = []
-    for index, row in enumerate(sheet.iter_rows(min_row=1, max_row=max_row, values_only=True), start=1):
-        data_list.extend(list((row)))
-    workbook.close()
-    listt = [str(num) for num in data_list]
-    return listt 
+
+
+import pandas as pd
+def get_excel_data(excel,fun):
+    DATA =  pd.read_excel(excel,sheet_name=0,header=None)
+    first_column = DATA.to_dict()[0] # for first column
+    uan_number = []
+    for i in range(len(first_column)): # dict to list
+        uan_number.append(first_column[i])
+    if 1 in uan_number : # Error Handling
+        text = "UAN" if fun.lower() == "pf" else 'Esic'
+        raise Exception(f"In this Excel sheet doesn't have a {text} number. Select the proper Excel sheet that contains the {text} number.")
+    else:
+        return uan_number
 
 def PF(pdf):
     doc = fitz.open(pdf)
@@ -260,8 +264,15 @@ def highlight_only(excel,pdf,color=(0,0,1)):
 
 def Change_filename(file,project_name):
     file_name = file.replace(" ", "_")
-    return f"{project_name}_{file_name}"
+    projectname = project_name.replace(" ", "_")
+    return f"{projectname}_{file_name}"
 
 def save_file(file,project_name):
     photo_name = secure_filename(Change_filename(file.filename, project_name))
     file.save(os.path.join(folder, photo_name))
+
+
+
+
+
+

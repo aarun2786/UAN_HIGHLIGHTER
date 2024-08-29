@@ -13,40 +13,40 @@ def home():
         fun = request.form['type']
         Project_name = request.form['Project_Name']
 
-        name = Change_filename(PDF.filename, Project_name)
-        excel = get_excel_data(EXCEL)
-        clr = color_selecton(color)
-        path = f"{folder}/{name}"
-        save_file(PDF, Project_name)
+        
+        try:  
+            clr = color_selecton(color)
+            save_file(PDF, Project_name)
+            name = Change_filename(PDF.filename, Project_name)      
+            path = f"{folder}/{name}"
+            excel = get_excel_data(EXCEL,fun)
+            if company == "Only Micron":
+                if fun == 'PF':
+                    pf_page = PF(path)
+                    pf = only_micron_pf(excel, path, pf_page, clr)
+                    update_json(Project_name.title(), pf, fun, name)
+                else:
+                    esic_page = ESIC(path)
+                    esic = only_micron_esi(excel, path, esic_page, clr)
+                    update_json(Project_name.title(), esic, fun, name)
 
-        if company == "Only Micron":
-            if fun == 'PF':
-                pf_page = PF(path)
-                pf = only_micron_pf(excel, path, pf_page, clr)
-                update_json(Project_name, pf, fun, name)
+            elif company == 'For all':
+                if fun == 'PF':
+                    pf_page = PF(path)
+                    pf = highlight_for_all_pf(excel, path, pf_page, clr)
+                    update_json(Project_name.title(), pf, fun, name)
+                else:
+                    esic_page = ESIC(path)
+                    esic = highlight_for_all_esic(excel, path, esic_page, clr)
+                    update_json(Project_name.title(), esic, fun, name)
+
             else:
-                esic_page = ESIC(path)
-                esic = only_micron_esi(excel, path, esic_page, clr)
-                update_json(Project_name, esic, fun, name)
-
-        elif company == 'For all':
-            if fun == 'PF':
-                pf_page = PF(path)
-                pf = highlight_for_all_pf(excel, path, pf_page, clr)
-                update_json(Project_name, pf, fun, name)
-            else:
-                esic_page = ESIC(path)
-                esic = highlight_for_all_esic(excel, path, esic_page, clr)
-                update_json(Project_name, esic, fun, name)
-
-        else:
-                page = highlight_only(excel,path,clr)
-                update_json(Project_name,page ,fun,name)
-
-
-
-        return redirect(url_for("Main.home"))
-
+                    page = highlight_only(excel,path,clr)
+                    update_json(Project_name,page ,fun,name)
+            return redirect(url_for("Main.home"))
+        except Exception as error:
+            flash(f"{error}",'error')
+            return redirect(url_for("Main.home"))  
     json_data = get_json()
     return render_template('home.html',name=json_data)
 

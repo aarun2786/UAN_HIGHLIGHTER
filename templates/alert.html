@@ -10,11 +10,11 @@
         {% if messages %}
             {% for category,mesg in messages %}
                 {% if category == "success" %}
-                    <div class="alert alert-success col-7 mt-2 py-2 " role="alert">
+                    <div class="alert alert-success  mt-2 py-2 " role="alert">
                         {{ mesg }}
                     </div>
                 {% elif category == "error" %}
-                    <div class="alert alert-danger col-7 mt-2 py-2 " role="alert">
+                    <div class="alert alert-danger fw-bolder fs-4  py-2 " role="alert">
                         {{ mesg }}
                     </div>
                 {% endif %}

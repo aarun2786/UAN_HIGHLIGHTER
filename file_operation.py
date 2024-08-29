@@ -34,5 +34,3 @@ def time_covert():
     time_format = indian_time.strftime("%d-%m-%Y %I:%M %p")
     return time_format,indian_time.day
 
-
-
