@@ -1,4 +1,4 @@
-import openpyxl
+from openpyxl import *
 import fitz
 import os
 import json
@@ -10,14 +10,16 @@ from werkzeug.utils import secure_filename
 
 import pandas as pd
 def get_excel_data(excel,fun):
-    DATA =  pd.read_excel(excel,sheet_name=1,header=None)
+    wb = load_workbook(excel,read_only=True)
+    sheetName =wb.active.title
+    wb.close()
+    DATA =  pd.read_excel(excel,sheet_name=sheetName,header=None)
     first_column = DATA.to_dict()[0] # for first column
     uan_number = []
+
     for i in range(len(first_column)): # dict to list
         uan_number.append(str(first_column[i]))
-    uan_number
-    if 1 in uan_number : # Error Handling
-        print(uan_number)
+    if "1" in uan_number or None in uan_number : # Error Handling
         text = "UAN" if fun.lower() == "pf" else 'Esic'
         raise Exception(f"In this Excel sheet doesn't have a {text} number. Select the proper Excel sheet that contains the {text} number.")
     else:
@@ -261,8 +263,7 @@ def highlight_only(excel,pdf,color=(0,0,1)):
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
     page_num = sorted(set(page_num))
-    highlight_pageno = [ str(pg) for pg in page_num]
-    return ",".join(highlight_pageno)
+    return {"": ",".join(str(pg) for pg in page_num)}
 
 def Change_filename(file,project_name):
     file_name = file.replace(" ", "_")
@@ -277,11 +278,5 @@ def save_file(file,project_name):
 
 
 
-
-def test():
-    k = [1,2,3,5]
-    if 1 in k:
-        print(True)
-
-
-test()
+ws = 'uan.xlsx'
+#print(get_excel_data(ws,'PF'))
