@@ -93,8 +93,9 @@ def highlight_for_all_pf(excel,pdf,page,color=(0,0,1)):
     for index,pgeno in enumerate(smw_page):
         smw.insert(1+index,pgeno)
 
-    for value ,key in zip(['MICRON','RMW','SMW'],[mic,rmw,smw]):
-        pageNoeach[value] = ",".join([ str(pg) for pg in key])
+    for key ,value in zip(['MICRON','RMW','SMW'],[mic,rmw,smw]):
+        if len(value) > 2:    
+            pageNoeach[key] = ",".join([ str(pg) for pg in value])
     return pageNoeach
 
 def only_micron_pf(excel,pdf,page,color=(0,0,1)):
@@ -210,9 +211,9 @@ def highlight_for_all_esic(excel,pdf,page,color=(0,0,1)):
     rmw_page.pop(len(rmw_page)-1)
     smw_page.pop(len(smw_page)-1)
     # covert list of page into the company wise 
-    for value ,key in zip(['MICRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
-        pageNoeach[value] = ",".join([ str(pg) for pg in key])
-
+    for key ,value in zip(['MICRON','RMW','SMW'],[mic_page,rmw_page,smw_page]):
+        if len(value) > 2:    
+            pageNoeach[key] = ",".join([ str(pg) for pg in value])
     return pageNoeach
 
 def only_micron_esi(excel,pdf,page,color=(0,0,1)):
@@ -263,7 +264,8 @@ def highlight_only(excel,pdf,color=(0,0,1)):
     doc.save(pdf,incremental=True,encryption=0)
     doc.close
     page_num = sorted(set(page_num))
-    return {"": ",".join(str(pg) for pg in page_num)}
+    helightlighted =",".join([str(pg) for pg in page_num])
+    return {"": helightlighted}
 
 def Change_filename(file,project_name):
     file_name = file.replace(" ", "_")
