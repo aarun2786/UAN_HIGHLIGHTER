@@ -16,15 +16,45 @@
         overflow: scroll;
         height: 500px;
     }
+    #spinner{
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        color: rgb(85, 0, 255);
+        width: 100vw;
+        height: 100vh;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.669);
+    }
+    .spinner-border{
+        height: 4em;
+        width: 4em;
+
+    }
+    body{
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
 </style>
 <body style="background-image: linear-gradient(to right, #5C2E7E , #000000);" >
+    
+    <div   id="spinner" >
+        <div class="spinner-border fs-1 fw-1" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    
     <div id="message">{% include 'alert.html' %}</div>
-    <div class="row  mx-5 my-5  ">
+    <div class="row  mx-5  ">
 <! -- This First row and First Columns -- >
-        <div class="col-4 " style="background-image: linear-gradient(to right, #124076 , #005B41);">
+        <div class="col-4 my-5 " style="background-image: linear-gradient(to right, #124076 , #005B41);">
 
 <! -- This 2nd is row belongs to  input file  -- >
-            <form action="{{url_for('Main.home')}}" method="post" enctype="multipart/form-data"  >
+            <form action="{{url_for('Main.home')}}" method="post" enctype="multipart/form-data" id="form" onsubmit="formclick()"  >
 
                 <div class="row text-white " >
                     <label class="p-2 text-white bg-opacity-75  " style="background-image: linear-gradient(to right, #1C82AD , #03C988);" >File</label>
@@ -79,7 +109,7 @@
 <! -- This 6th is row belongs to  input sumbimt  -- >
                     <div class="row px-3 py-2 " >
                         <div class="   text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button id="btn" type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
             
@@ -91,7 +121,7 @@
     
 <! -- This 2nd column   -- >
 
-        <div class="col   py-4 px-1" style="background-image: linear-gradient(to right, #0E2954 , #1F6E8C);" >
+        <div class="col my-5   py-4 px-1" style="background-image: linear-gradient(to right, #0E2954 , #1F6E8C);" >
             <div class="scroll     " >
                 {% for data in name %}
                     <div class=" container  border    ">
@@ -138,12 +168,15 @@
                         <div class="col-16    " >
                                 <div class="   text-white py-1 " >
                                     {% for pageno in   data["Page"] %}
-                                        <div class="fw-bold text-white " >
-                                            {{ pageno }} 
-                                        </div>
-                                        <div class="text-break text-white " >
-                                             {{data["Page"][pageno]}}
-                                        </div>    
+                                        
+                                        {% if data["Page"][pageno]|length > 3 %}
+                                            <div class="fw-bold text-white " >
+                                                {{ pageno }} 
+                                            </div>
+                                            <div class="text-break text-white " >
+                                                {{data["Page"][pageno]}}
+                                            </div> 
+                                            {% endif %}   
                                         {% endfor %}
                                 </div>
                             </div>
@@ -162,11 +195,17 @@
 <script>
     function delete_msg(){
         let mesg = document.getElementById("message")
-        console.log(mesg);
         mesg.style.display ="none";
         
     };
     setTimeout(delete_msg, 6000);
+    
+    let spin = document.getElementById("spinner")
+    spin.style.display = 'none'
+    function formclick(){
+        spin.style.display = 'flex'
+    }
+    window.addEventListener('reload',formclick)
 </script>
 </body>
 </html>
